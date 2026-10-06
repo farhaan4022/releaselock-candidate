@@ -9,3 +9,6 @@ __pycache__/
 
 # Local InvenTree data
 local/inventree-data/
+
+# Keep example environment file
+!local/.env.example
