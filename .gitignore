@@ -6,3 +6,6 @@ __pycache__/
 .vscode/
 .idea/
 .DS_Store
+
+# Local InvenTree data
+local/inventree-data/
