@@ -1,0 +1,40 @@
+(cors_headers) {
+	header Allow GET,HEAD,OPTIONS
+	header Access-Control-Allow-Origin *
+	header Access-Control-Allow-Methods GET,HEAD,OPTIONS
+	header Access-Control-Allow-Headers Authorization,Content-Type,User-Agent
+}
+
+:80 {
+	log {
+		output stdout
+	}
+
+	encode gzip
+
+	request_body {
+		max_size 100MB
+	}
+
+	handle_path /static/* {
+		import cors_headers
+
+		root * /var/www/static
+		file_server
+	}
+
+	handle_path /media/* {
+		import cors_headers
+
+		root * /var/www/media
+		file_server
+
+		header Content-Disposition attachment
+
+		forward_auth {$INVENTREE_SERVER:http://127.0.0.1:8000} {
+			uri /auth/
+		}
+	}
+
+	reverse_proxy {$INVENTREE_SERVER:http://127.0.0.1:8000}
+}
